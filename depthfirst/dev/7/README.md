@@ -182,7 +182,7 @@ def solve(board: str) -> str:
     the board yielding valid Boggle words."""
 
     def accept_func(result: List[int]):
-        as_letters = [table[X] for X in path]
+        as_letters = [table[X] for X in result]
         word = ''.join(as_letters)
         return word in _WORDS
 
@@ -191,7 +191,7 @@ def solve(board: str) -> str:
     for start in range(0, node_count):
         for end in range(0, node_count):
             for path in depthfirst(start, end, graph, accept_func):
-                yield word
+                yield ''.join([table[X] for X in path])
 ```
 
 There, much cleaner.  Now all we need is a `test_boggle.py` and…

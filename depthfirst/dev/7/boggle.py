@@ -33,15 +33,17 @@ def solve(board: str) -> str:
     as a single string with embedded \ns, iterate over
     the board yielding valid Boggle words."""
 
+    def accept_func(result: List[int]):
+        as_letters = [table[X] for X in result]
+        word = ''.join(as_letters)
+        return word in _WORDS
+
     (graph, table) = _make_board(board)
     node_count: int = len(graph)
     for start in range(0, node_count):
         for end in range(0, node_count):
-            for path in depthfirst(start, end, graph):
-                as_letters = [table[X] for X in path]
-                word = ''.join(as_letters)
-                if word in _WORDS:
-                    yield word
+            for path in depthfirst(start, end, graph, accept_func):
+                yield ''.join([table[X] for X in path])
 
 
 def _make_board(input_str: str) -> (List[List[int]], List[str]):
