@@ -14,6 +14,20 @@ XLUAW
 BDFGH
 IJKMN
 OPQST"""
+
+    board2 = """CATERWAULING
+ASDFGHJKLZXC
+QAZWSXEDCRFV
+TGBYHNUJMIKL
+OKMIJNUHBYGV
+TFCRDXESZWAQ
+ASDFGHJKLZXC
+QAZWSXEDCRFV
+TGBYHNUJMIKL
+OKMIJNUHBYGV
+TFCRDXESZWAQ
+ABABABABABAB"""
+
     known_words = set(["cat", "cater", "caterwaul", "ate", "tea",
                        "eta", "late", "lute", "later", "wag",
                        "jib", "poi"])

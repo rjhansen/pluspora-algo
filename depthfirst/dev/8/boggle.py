@@ -31,32 +31,30 @@ def solve(board: str) -> str:
     as a single string with embedded \ns, iterate over
     the board yielding valid Boggle words."""
 
-    def accept_func(result: List[int]):
-        as_letters = [table[X] for X in result]
-        word = ''.join(as_letters)
-        return word in _WORDS
-
-    def pv_func(sofar: List[int]):
-        as_letters = [table[X] for X in sofar]
-        word = ''.join(as_letters)
-
-        left = 0
-        right = len(_WORDS)
+    def find_insertion_point(word: str) -> int:
+        left: int = 0
+        right: int = len(_WORDS)
         while left < right:
-            midpoint = int((left + right) / 2)
+            midpoint: int = int((left + right) / 2)
             if word <= _WORDS[midpoint]:
                 right = midpoint
             else:
                 left = midpoint + 1
-        insertion_point = int((left + right) / 2)
+        return int((left + right) / 2)
 
-        if insertion_point >= len(_WORDS):
-            return False
-        insert_before = _WORDS[insertion_point]
-        if len(word) <= len(insert_before):
-            if word == insert_before[:len(word)]:
-                return True
-        return False
+    def accept_func(answer: List[int]) -> bool:
+        word: str = ''.join([table[X] for X in answer])
+        insert_at: int = find_insertion_point(word)
+
+        return (insert_at < len(_WORDS) and
+                _WORDS[insert_at] == word)
+
+    def pv_func(sofar: List[int]) -> bool:
+        word: str = ''.join([table[X] for X in sofar])
+        insert_at: int = find_insertion_point(word)
+
+        return (insert_at < len(_WORDS) and
+                word == _WORDS[insert_at][:len(word)])
 
     (graph, table) = _make_board(board)
     node_count: int = len(graph)
