@@ -8,7 +8,7 @@
 
 ## PEP8
 
-Python Enhancement Proposal #8 specifies how Python code should be laid out, and the `pep8` tool helps automate testing code for conformance to PEP8.  Since we have this tool it would be a crying shame to not use it.  All examples from here on out will have a `Conformance` section, where any deviations from PEP8 will be noted.
+Python Enhancement Proposal #8 specifies how Python code should be laid out, and the `pycodestyle` tool helps automate testing code for conformance to PEP8.  Since we have this tool it would be a crying shame to not use it.  All examples from here on out will have a `Conformance` section, where any deviations from PEP8 will be noted.
 
 ## The Minotaur
 
@@ -119,9 +119,9 @@ We're reaching a point where we've got something worth writing unit tests for.  
 
 No errors and full marks.  (Note that this doesn't mean we're bug-free.  It just means we're free of the easy bugs `pylint` was designed to find.)
 
-### pep8
+### pycodestyle
 
-`pep8` tells us we're violating PEP8 guideline E262, which says that comments should begin with a hashmark and a single space.  In some of our comments we violate this rule in order to make numbers line up nicely, so we've got a good reason for this violation.  Re-running it with `pep8 --ignore=E262 depthfirst.py` yields no other problems.
+`pycodestyle` tells us we're violating PEP8 guideline E262, which says that comments should begin with a hashmark and a single space.  In some of our comments we violate this rule in order to make numbers line up nicely, so we've got a good reason for this violation.  Re-running it with `pycodestyle --ignore=E262 depthfirst.py` yields no other problems.
 
 ## Next steps
 

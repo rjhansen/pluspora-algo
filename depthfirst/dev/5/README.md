@@ -83,7 +83,7 @@ def _make_maze(size: int) -> List[List[int]]:
 For testing purposes we'll need a variety of mazes of different sizes, so we've written a function that will make empty mazes — no interior walls, etcetera — of a given size.  Following our convention, we prefix the function name with an underscore to mark it as being for our use only.
 
 ```python
-def test_depthfirst_no_repeats():
+def test_depthfirst_no_repeats() -> None:
     """Creates mazes and tests them to ensure that for each
     generated path, each step in the path is valid, no rooms
     are repeated within a given path, and each path generated
@@ -166,7 +166,11 @@ Well, _crap._  We're generating redundant paths.  Time for us to go back to the 
 
 No errors and full marks.  Our unit testing revealed a bug, but `pylint` didn't.  Take this as a lesson: `pylint` is a useful tool but it cannot save you from yourself.
 
-### pep8
+### pycodestyle
+
+No errors and full marks.
+
+### mypy
 
 No errors and full marks.
 

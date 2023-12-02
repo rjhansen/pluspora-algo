@@ -23,11 +23,11 @@ The really annoying part comes from algorithms which are sometimes well-behaved 
 ## A general rule
 
 * Prototype recursively, deploy iteratively.
-* Only deploy iterative code if you've carefully considered the risks of stack exhaustion
+* Only deploy incrementally recursive code if you've carefully considered the risks of stack exhaustion.
 
 ## The challenge
 
-So.  As already mentioned, our maze traverser is an example of an iterative recursive algorithm.  The Minotaur can make it blow sky-high by giving it a large maze.  To resolve this bug and make it possible to run this on enormous input sets, we'll convert it from a recursive function into an iterative function.
+So.  As already mentioned, our maze traverser is an example of an incremental recursive algorithm.  The Minotaur can make it blow sky-high by giving it a large maze.  To resolve this bug and make it possible to run this on enormous input sets, we'll convert it from a recursive function into an iterative function.
 
 Before reading further, try to do it yourself.  It's a surprisingly difficult task if you haven't done it before.  Don't be afraid to ask for help.
 
@@ -50,7 +50,7 @@ Did you notice that in Iteration 1 we failed to fully use type hints?  We didn't
 In Python, a bare declaration is a no-op.  Variables do not become real until they are instantiated.  So when we create a block of variable declarations — in order to get all the type hinting in one place — we also initialize everything.
 
 ```python
-    stack: List[List[str, List[str]]] = [[start, list(_MAZE[start])]]
+    stack: List[Tuple[str, List[str]]] = [(start, list(_MAZE[start]))]
     current_room: str = ""
     first_portal: str = ""
     portals: List[str] = []
@@ -59,9 +59,9 @@ In Python, a bare declaration is a no-op.  Variables do not become real until th
 
 I kind of lied about how we're not putting things onto the stack.  We totally are, and anyone who says this iterative code doesn't use a stack is lying to you.  It's just that this stack is one we maintain ourselves and we store it off in the vast space of userland.
 
-The Python interpreter's built-in stack can only handle a few hundred frames before exhausting.  But this userland stack can grow enormously: I've got 32GiB of RAM on this laptop.
+The Python interpreter's built-in stack can only handle a few hundred frames before exhausting.  But this userland stack can grow enormously: I've got 64GiB of RAM on this laptop.
 
-Python uses square brackets to denote a list.  We're using a list as our stack.  Each of our simulated stack frames is a list containing a room (a key in `_MAZE`) and a list of unvisited exits.
+Python uses square brackets to denote a list.  We're using a list as our stack.  Each of our simulated stack frames is a tuple containing a room (a key in `_MAZE`) and a list of unvisited exits.
 
 ```python
     while stack:
@@ -80,7 +80,7 @@ You may be confused by the `-1` used as an index.  Python has a lovely feature w
 ```python
         visited = [X[0] for X in stack]
         portals = [X for X in portals if X not in visited]
-        stack[-1] = [current_room, portals]
+        stack[-1] = (current_room, portals)
 ```
 
 The very first thing we do is use a clever list comprehension to figure out where we've already been.  We iterate over `stack`, calling each element `X`, and collect the first element `X[0]` out of it.
@@ -102,14 +102,14 @@ The first part of this should be fairly obvious: if we're done, we're done!  And
 
 ```python
         first_portal = portals[0]
-        stack[-1] = [current_room, portals[1:]]
-        stack.append([first_portal, list(_MAZE[first_portal])])
+        stack[-1] = (current_room, portals[1:])
+        stack.append((first_portal, list(_MAZE[first_portal])))
 ```
 The preceding `if` statements all led to the `while` loop either breaking out or resuming.  We could have structured these three clauses as an `if/elif/else`, but I personally find this more readable: if X, return, if Y, continue, otherwise, fallthrough to the block below.
 
 Our `first_portal = portals[0]` line is guaranteed to always work: if we don't have at least one portal, we'd bail out in the clause above.
 
-In our next line, we adjust our current (final) stack frame.  Instead of being `[current_room, portals]`, it's `[current_room, portals[1:]]`.  The colon syntax indicates a _list slice_.  A slice from X to X is written as `slice[X:Y]`, and is a half-open sequence starting at X and running up to, but not including, Y.  Attempting to slice off the end of a list is all right: it just gives you an empty list.
+In our next line, we adjust our current (final) stack frame.  Instead of being `(current_room, portals)`, it's `(current_room, portals[1:])`.  The colon syntax on `portals` indicates a _list slice_.  A slice from X to X is written as `slice[X:Y]`, and is a half-open sequence starting at X and running up to, but not including, Y.  Attempting to slice off the end of a list is all right: it just gives you an empty list.
 
 So, why do we slice?  Because we're about to explore a new room, and we want to do the equivalent of mark an X over the door.  By removing it from our list of exits we guarantee we will never consider it again.
 

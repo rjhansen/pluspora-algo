@@ -35,7 +35,7 @@ will be used to solve the following simple maze.
 |I J|K L|
 + + + + +
 |M|N O|P|
-+ + +_+-+
++ + + +-+
 |Q R S T|
 +-+-+-+-+
 
@@ -103,7 +103,7 @@ In our `_MAZE`, each key represents a location in the maze, and each value repre
 With this out of the way, let's continue!
 
 ```python
-def depthfirst(current: str, finish: str, rope: str=""):
+def depthfirst(current: str, finish: str, rope: str = ""):
     """Uses naïve depth-first search to find an optimal route
     out of the Minotaur's maze."""
 ```

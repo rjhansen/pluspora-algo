@@ -31,29 +31,33 @@ while stack:
     current_room, portals = stack[-1]
     visited = [X[0] for X in stack]
     portals = [X for X in portals if X not in visited]
-    stack[-1] = [current_room, portals]
+    stack[-1] = (current_room, portals)
 
     if current_room == finish:
         yield visited
+        stack = stack[:-1]
+        continue
     if not portals:
         stack = stack[:-1]
         continue
     first_portal = portals[0]
-    stack[-1] = [current_room, portals[1:]]
-    stack.append([first_portal, graph[first_portal]])
+    stack[-1] = (current_room, portals[1:])
+    stack.append((first_portal, graph[first_portal]))
 ```
 
-Playing around with it and littering it with `print` statements to dump the stack lead us quickly to the offending portion:
+Playing around with it and littering it with `print` calls to dump the stack lead us quickly to the offending portion:
 
 ```python
 if current_room == finish:
     yield visited
+    stack = stack[:-1]
+    continue
 if not portals:
     stack = stack[:-1]
     continue
 first_portal = portals[0]
-stack[-1] = [current_room, portals[1:]]
-stack.append([first_portal, graph[first_portal]])
+stack[-1] = (current_room, portals[1:])
+stack.append((first_portal, graph[first_portal]))
 ```
 
 If we're in the finish room, we `yield`.  The next iteration begins on the next line (`if not portals`).  Assume this `if` doesn't get tripped.  Execution then continues on the line starting with `first_portal`.
@@ -89,7 +93,11 @@ Now the logic is, "if we find the exit `yield` it; and on our next invocation, w
 
 No errors and full marks.
 
-### pep8
+### pycodetest
+
+No errors and full marks.
+
+### mypy
 
 No errors and full marks.
 

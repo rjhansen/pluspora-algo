@@ -37,10 +37,12 @@ Let's sling some code.  Open up `boggle.py` in the same directory as `depthfirst
 
 ## Loading our dictionary
 ```python
-
 from io import TextIOWrapper
 from re import compile as re_c
+from typing import List, Set, Tuple, Generator
 from zipfile import ZipFile
+from depthfirst import depthfirst
+
 
 def _populate_words() -> Set[str]:
     ret_val: Set[str] = set()
@@ -66,7 +68,7 @@ The `with` syntax is Python's way of grabbing a limited resource in such a way t
 ## Sanity checking our input
 
 ```python
-def sanity_check() -> (int, int):
+def sanity_check() -> Tuple[int, int]:
     rows = input_str.split("\n")
     rows = [X.strip() for X in rows]
     for row in rows[1:]:
@@ -116,7 +118,7 @@ def _make_board(input_str: str) -> (List[List[int]], List[str]):
     rows: int = 0
     cols: int = 0
     (rows, cols) = sanity_check()
-    graph: List[int] = make_grid(rows, cols)
+    graph: List[List[int]] = make_grid(rows, cols)
     lookup_table = list(input_str.lower().replace("\n", ""))
     lookup_table = ["qu" if X == "q" else X for X in lookup_table]
     return (graph, lookup_table)
@@ -125,8 +127,6 @@ def _make_board(input_str: str) -> (List[List[int]], List[str]):
 You see, grasshopper, in Python functions may be defined within functions.  `make_grid` and `sanity_check` are only visible within `_make_board`: for that reason they're inherently private.  And while docstrings are always a good idea, they're less essential for functions that are never exposed to end-users.
 
 The only thing here that might be unexpected is Python's ternary-if expression.  `X if Y else Z` is equivalent to `Y ? X : Z` in most C-derived languages.  That list comprehension in essence says, "for each letter in our table, if it's a 'Q' change it to a 'QU'."  This is per standard Boggle rules, where a 'U' is assumed to be immediately following each 'Q'.
-
-Also, did you note that `make_grid` is type-hinted as `List[List[int]]`, yet we assigned its value to a variable we type-hinted as `List[int]`?  Let this be another lesson: type hinting is just that, _hinting._  Python's static analysis tools are still under development and aren't as robust as we'd like.  (The version of the code in the repo has correct type hinting, but seriously, change it and it'll still work, at least with Python 3.6.6.)
 
 ## Playing Boggle
 
@@ -162,7 +162,7 @@ Change `depthfirst` in `depthfirst.py` to be:
 ```python
 def depthfirst(start: int, finish: int,
                graph: List[List[int]],
-               accept_func=lambda x: True) -> List[int]:
+               accept_func=lambda x: True) -> Generator[List[int], None, None]:
 
 # much stuff omitted
         if current_room == finish:
@@ -176,7 +176,7 @@ def depthfirst(start: int, finish: int,
 Change our `solve` to be:
 
 ```python
-def solve(board: str) -> str:
+def solve(board: str) -> Generator[str, None, None]:
     """Given a rectangular grid of letters represented
     as a single string with embedded \ns, iterate over
     the board yielding valid Boggle words."""
@@ -245,7 +245,11 @@ test_boggle.py .                                                         [100%]
 
 No errors and full marks.
 
-### pep8
+### pycodestyle
+
+No errors and full marks.
+
+### mypy
 
 No errors and full marks.
 

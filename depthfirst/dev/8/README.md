@@ -41,14 +41,18 @@ Implementing partial path validation requires us to tweak our depth-first engine
 def depthfirst(start: int, finish: int,
                graph: List[List[int]],
                accept_func=lambda x: True,
-               pv_func=lambda x: True) -> List[int]:
+               pv_func=lambda x: True) -> Generator[List[int], None, None]:
     """Uses slightly less naïve depth-first search to find a
     route out of the Minotaur's maze."""
 
     # snip snip snip
 
     while stack:
-        # snip snip snip
+        current_room, portals = stack[-1]
+        visited = [X[0] for X in stack]
+        portals = [X for X in portals if X not in visited]
+        stack[-1] = (current_room, portals)
+
         if not pv_func(visited):
             stack = stack[:-1]
             continue
@@ -57,6 +61,7 @@ def depthfirst(start: int, finish: int,
                 yield visited
             stack = stack[:-1]
             continue
+
 ```
 
 `pv_func` is shorthand for 'partial validation function', and it works quite simply.  If our current route cannot yield a result, then we back out one step and resume searching.
@@ -73,7 +78,7 @@ node_count: int = len(graph)
 for start in range(0, node_count):
     for end in range(0, node_count):
         for path in depthfirst(start, end, graph,
-                               accept_func, pv_func):
+                                accept_func, pv_func):
             yield ''.join([table[X] for X in path])
 ```
 
@@ -130,7 +135,11 @@ Our `pytest` script now runs in 0.15 seconds, for a speedup of 37,300%!
 
 No errors and full marks.
 
-### pep8
+### pycodestyle
+
+No errors and full marks.
+
+### mypy
 
 No errors and full marks.
 
