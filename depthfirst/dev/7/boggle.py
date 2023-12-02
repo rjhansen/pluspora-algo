@@ -8,7 +8,7 @@ it."""
 
 from io import TextIOWrapper
 from re import compile as re_c
-from typing import List, Set
+from typing import List, Set, Tuple, Generator
 from zipfile import ZipFile
 from depthfirst import depthfirst
 
@@ -28,7 +28,7 @@ def _populate_words() -> Set[str]:
 _WORDS = _populate_words()
 
 
-def solve(board: str) -> str:
+def solve(board: str) -> Generator[str, None, None]:
     """Given a rectangular grid of letters represented
     as a single string with embedded \ns, iterate over
     the board yielding valid Boggle words."""
@@ -46,7 +46,7 @@ def solve(board: str) -> str:
                 yield ''.join([table[X] for X in path])
 
 
-def _make_board(input_str: str) -> (List[List[int]], List[str]):
+def _make_board(input_str: str) -> Tuple[List[List[int]], List[str]]:
     def make_grid(row_c: int, col_c: int) -> List[List[int]]:
         maze: List[List[int]] = []
         for row in range(0, row_c):
@@ -65,7 +65,7 @@ def _make_board(input_str: str) -> (List[List[int]], List[str]):
             maze += thisrow
         return maze
 
-    def sanity_check() -> (int, int):
+    def sanity_check() -> Tuple[int, int]:
         rows = input_str.split("\n")
         rows = [X.strip() for X in rows]
         for row in rows[1:]:

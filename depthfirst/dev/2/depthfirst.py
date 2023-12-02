@@ -24,7 +24,7 @@ the _optimal_ valid path.
 For right now let's focus on the simple case."""
 
 
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 _MAZE: Dict[str, str] = {
     "A": "BE",
@@ -53,7 +53,7 @@ def depthfirst(start: str, finish: str) -> str:
     """Uses slightly less naïve depth-first search to find a
     route out of the Minotaur's maze."""
 
-    stack: List[List[str, List[str]]] = [[start, list(_MAZE[start])]]
+    stack: List[Tuple[str, List[str]]] = [(start, list(_MAZE[start]))]
     current_room: str = ""
     first_portal: str = ""
     portals: List[str] = []
@@ -63,7 +63,7 @@ def depthfirst(start: str, finish: str) -> str:
         current_room, portals = stack[-1]
         visited = [X[0] for X in stack]
         portals = [X for X in portals if X not in visited]
-        stack[-1] = [current_room, portals]
+        stack[-1] = (current_room, portals)
 
         if current_room == finish:
             break
@@ -71,8 +71,8 @@ def depthfirst(start: str, finish: str) -> str:
             stack = stack[:-1]
             continue
         first_portal = portals[0]
-        stack[-1] = [current_room, portals[1:]]
-        stack.append([first_portal, list(_MAZE[first_portal])])
+        stack[-1] = (current_room, portals[1:])
+        stack.append((first_portal, list(_MAZE[first_portal])))
 
     return ''.join([X[0] for X in stack])
 

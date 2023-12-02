@@ -37,13 +37,10 @@ def test_depthfirst_no_repeats():
     are repeated within a given path, and each path generated
     is unique."""
 
-    print()
     for size in range(2, 6):
-        pathcount = 0
         foundset: Set[str] = set()
         maze: List[List[int]] = _make_maze(size)
         for route in depthfirst(0, (size**2) - 1, maze):
-            pathcount += 1
             # Ensure each room is accessible via the one
             # preceding it.
             for index in range(1, len(route)):
@@ -61,4 +58,3 @@ def test_depthfirst_no_repeats():
             as_string: str = '-'.join([str(X) for X in route])
             assert as_string not in foundset
             foundset.add(as_string)
-        print(f"paths = {pathcount}")
