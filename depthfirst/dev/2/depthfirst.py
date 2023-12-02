@@ -12,7 +12,7 @@ will be used to solve the following simple maze.
 |I J|K L|
 + + + + +
 |M|N O|P|
-+ + +_+-+
++ + + +-+
 |Q R S T|
 +-+-+-+-+
 
