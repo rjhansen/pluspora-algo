@@ -6,6 +6,7 @@ can be used to find one or all routes through a graph."""
 
 from typing import List, Generator, Tuple
 
+
 def depthfirst(start: int, finish: int,
                graph: List[List[int]]) -> Generator[List[int], None, None]:
     """Uses slightly less naïve depth-first search to find a

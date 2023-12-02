@@ -31,7 +31,7 @@ def _make_maze(size: int) -> List[List[int]]:
     return maze
 
 
-def test_depthfirst_no_repeats():
+def test_depthfirst_no_repeats() -> None:
     """Creates mazes and tests them to ensure that for each
     generated path, each step in the path is valid, no rooms
     are repeated within a given path, and each path generated

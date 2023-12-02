@@ -49,6 +49,7 @@ _MAZE: Dict[str, str] = {
     "T": "S"
 }
 
+
 def depthfirst(start: str, finish: str) -> str:
     """Uses slightly less naïve depth-first search to find a
     route out of the Minotaur's maze."""
@@ -75,6 +76,7 @@ def depthfirst(start: str, finish: str) -> str:
         stack.append((first_portal, list(_MAZE[first_portal])))
 
     return ''.join([X[0] for X in stack])
+
 
 if __name__ == '__main__':
     print(depthfirst("A", "T"))

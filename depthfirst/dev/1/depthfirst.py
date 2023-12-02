@@ -49,7 +49,8 @@ _MAZE: Dict[str, str] = {
     "T": "S"
 }
 
-def depthfirst(current: str, finish: str, rope:str=""):
+
+def depthfirst(current: str, finish: str, rope: str = ""):
     """Uses naïve depth-first search to find an optimal route
     out of the Minotaur's maze."""
 
@@ -66,6 +67,7 @@ def depthfirst(current: str, finish: str, rope:str=""):
             return route
 
     return None
+
 
 if __name__ == '__main__':
     print(depthfirst("A", "T"))
