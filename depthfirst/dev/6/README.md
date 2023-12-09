@@ -50,8 +50,6 @@ Playing around with it and littering it with `print` calls to dump the stack lea
 ```python
 if current_room == finish:
     yield visited
-    stack = stack[:-1]
-    continue
 if not portals:
     stack = stack[:-1]
     continue
